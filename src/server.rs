@@ -162,7 +162,7 @@ async fn send_output(
     }
     let result = zuk
         .get_commands(&tokens, &streams)
-        .and_then(|commands| zuk.run_commands(commands, &mut streams));
+        .and_then(|commands| zuk.run_commands(commands, &mut streams, &Default::default()));
 
     debug!(logger, "result: {:?}", result);
 
