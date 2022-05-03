@@ -1,4 +1,5 @@
 use mediatype::{media_type, names::*};
+use std::str;
 use teloxide::RequestError;
 use teloxide::{
     prelude2::*,
@@ -13,73 +14,72 @@ pub async fn render_output(
     msg: &Message,
     output: Output,
 ) -> Result<(), RequestError> {
-    for section in &output.sections {
-        render_section(bot.clone(), msg, &output, section).await?;
+    for block in output.blocks {
+        render_block(bot.clone(), msg, block).await?;
     }
     Ok(())
 }
 
-async fn render_section(
+async fn render_block(bot: AutoSend<Bot>, msg: &Message, block: Block) -> Result<(), RequestError> {
+    match block {
+        Block::Comment(comment) => {
+            bot.send_message(msg.chat.id, comment.text).send().await?;
+        }
+        Block::Data(data) => {
+            render_data(bot, msg, data).await?;
+        }
+        Block::Spoiler(spiler) => {
+            bot.send_message(
+                msg.chat.id,
+                format!(
+                    "{}: <spoiler>{}</spoiler>",
+                    spiler.title,
+                    spiler.data.unsecure()
+                ),
+            )
+            .parse_mode(ParseMode::Html)
+            .send()
+            .await?;
+        }
+        _ => {
+            bot.send_message(msg.chat.id, "[unimplemented]".to_string())
+                .send()
+                .await?;
+        }
+    }
+    Ok(())
+}
+
+async fn render_data(
     bot: AutoSend<Bot>,
     msg: &Message,
-    output: &Output,
-    section: &Section,
+    block: block::Data,
 ) -> Result<(), RequestError> {
-    let essence = section.media_type.essence();
+    let essence = block.media_type.essence();
+    let data = block.data.data().unwrap();
 
     match () {
-        _ if essence.ty == TEXT
-            && section.data.len() <= MAX_TEXT_LENGTH
-            && section.kind == SectionKind::Value =>
-        {
-            bot.send_message(msg.chat.id, format!("<pre>{}</pre>", section.as_utf8()))
-                .parse_mode(ParseMode::Html)
-                .send()
-                .await?;
-        }
-        _ if essence.ty == TEXT
-            && (section.data.len() <= MAX_TEXT_LENGTH || section.kind == SectionKind::Comment) =>
-        {
-            let text = if output.module.is_empty() {
-                section.as_utf8().to_string()
-            } else {
-                format!("<b>{}:</b> {}", output.module, section.as_utf8())
-            };
-            bot.send_message(msg.chat.id, text)
-                .parse_mode(ParseMode::Html)
-                .send()
-                .await?;
+        _ if essence.ty == TEXT && data.len() <= MAX_TEXT_LENGTH => {
+            bot.send_message(
+                msg.chat.id,
+                format!("<pre>{}</pre>", str::from_utf8(data).unwrap()),
+            )
+            .parse_mode(ParseMode::Html)
+            .send()
+            .await?;
         }
         _ if essence.ty == IMAGE => {
-            bot.send_photo(msg.chat.id, InputFile::memory(section.data.to_vec()))
+            bot.send_photo(msg.chat.id, InputFile::memory(data.to_vec()))
                 .send()
                 .await?;
         }
         _ if essence == media_type!(AUDIO / MPEG) || essence == media_type!(AUDIO / MP4) => {
-            bot.send_audio(msg.chat.id, InputFile::memory(section.data.to_vec()))
+            bot.send_audio(msg.chat.id, InputFile::memory(data.to_vec()))
                 .send()
                 .await?;
         }
         _ if essence == media_type!(VIDEO / MP4) => {
-            bot.send_video(msg.chat.id, InputFile::memory(section.data.to_vec()))
-                .send()
-                .await?;
-        }
-        _ if section.media_type.suffix() == Some(JSON) => {
-            if let Ok(value) = serde_json::from_slice::<serde_json::Value>(&section.data) {
-                if let Ok(yaml) = serde_yaml::to_string(&value) {
-                    bot.send_message(
-                        msg.chat.id,
-                        format!("<pre>{}</pre>", yaml.trim_start_matches("---\n")),
-                    )
-                    .parse_mode(ParseMode::Html)
-                    .send()
-                    .await?;
-                    return Ok(());
-                }
-            }
-            bot.send_message(msg.chat.id, format!("<pre>{}</pre>", section.as_utf8()))
-                .parse_mode(ParseMode::Html)
+            bot.send_video(msg.chat.id, InputFile::memory(data.to_vec()))
                 .send()
                 .await?;
         }
@@ -89,12 +89,12 @@ async fn render_section(
                 .unwrap_or(&"bin");
             bot.send_document(
                 msg.chat.id,
-                InputFile::memory(section.data.to_vec()).file_name(format!("data.{}", ext)),
+                InputFile::memory(data.to_vec()).file_name(format!("data.{}", ext)),
             )
             .send()
             .await?;
         }
-    };
+    }
 
     Ok(())
 }

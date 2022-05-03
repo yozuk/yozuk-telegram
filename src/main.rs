@@ -14,7 +14,8 @@ use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
 use teloxide::prelude2::*;
-use yozuk::{ModelSet, Yozuk};
+use yozuk::Yozuk;
+use yozuk_sdk::model::*;
 use yozuk_sdk::prelude::*;
 
 mod message;
@@ -72,8 +73,8 @@ async fn main() -> Result<()> {
 
     let model = ModelSet::from_data(yozuk_bundle::MODEL_DATA).unwrap();
     let yozuk = Yozuk::builder()
-        .logger(logger.clone())
-        .config(config)
+        .set_logger(logger.clone())
+        .set_config(config)
         .build(model);
 
     server::Server::start(yozuk, logger, bot).await;

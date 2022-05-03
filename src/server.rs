@@ -21,7 +21,7 @@ use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
 use tokio_stream::wrappers::UnboundedReceiverStream;
 use warp::Filter;
-use yozuk::{Yozuk, YozukError};
+use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
 pub struct Server {}
@@ -160,29 +160,20 @@ async fn send_output(
     for stream in &mut streams {
         stream.read_header()?;
     }
-    let result = zuk
-        .get_commands(&tokens, &streams)
-        .and_then(|commands| zuk.run_commands(commands, &mut streams, &Default::default()));
 
+    let commands = zuk.get_commands(&tokens, &streams);
+    if commands.is_empty() {
+        bot.send_message(msg.chat.id, "Sorry, I can't understand your request.")
+            .await?;
+        return Ok(());
+    }
+
+    let result = zuk.run_commands(commands, &mut streams, None);
     debug!(logger, "result: {:?}", result);
 
     let output = match result {
         Ok(output) => output,
-        Err(YozukError::UnintelligibleRequest { suggest }) => {
-            bot.send_message(msg.chat.id, "Sorry, I can't understand your request.")
-                .await?;
-            if let Some(suggest) = suggest {
-                bot.send_message(
-                    msg.chat.id,
-                    format!("💡Did you mean <em>{}</em> ?", suggest),
-                )
-                .parse_mode(ParseMode::Html)
-                .send()
-                .await?;
-            }
-            return Ok(());
-        }
-        Err(YozukError::CommandError { mut errors }) => errors.pop().unwrap(),
+        Err(mut errors) => errors.pop().unwrap(),
     };
 
     message::render_output(bot, &msg, output).await?;
