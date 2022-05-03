@@ -1,4 +1,6 @@
+use image::{ImageOutputFormat, RgbaImage};
 use mediatype::{media_type, names::*};
+use std::io::Cursor;
 use std::str;
 use teloxide::RequestError;
 use teloxide::{
@@ -8,6 +10,7 @@ use teloxide::{
 use yozuk_sdk::prelude::*;
 
 const MAX_TEXT_LENGTH: usize = 2048;
+const IMAGE_PREVIEW_SIZE: u32 = 32;
 
 pub async fn render_output(
     bot: AutoSend<Bot>,
@@ -40,6 +43,22 @@ async fn render_block(bot: AutoSend<Bot>, msg: &Message, block: Block) -> Result
             .parse_mode(ParseMode::Html)
             .send()
             .await?;
+        }
+        Block::Preview(block::Preview::Color(color)) => {
+            let color = image::Rgba([color.red, color.green, color.blue, color.alpha]);
+            let mut img = RgbaImage::new(IMAGE_PREVIEW_SIZE, IMAGE_PREVIEW_SIZE);
+            for x in 0..IMAGE_PREVIEW_SIZE {
+                for y in 0..IMAGE_PREVIEW_SIZE {
+                    img.put_pixel(x, y, color);
+                    img.put_pixel(y, x, color);
+                }
+            }
+            let mut data = Cursor::new(Vec::<u8>::new());
+            if img.write_to(&mut data, ImageOutputFormat::Png).is_ok() {
+                bot.send_photo(msg.chat.id, InputFile::memory(data.into_inner()))
+                    .send()
+                    .await?;
+            }
         }
         _ => {
             bot.send_message(msg.chat.id, "[unimplemented]".to_string())
