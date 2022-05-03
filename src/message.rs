@@ -57,16 +57,14 @@ async fn render_data(
 ) -> Result<(), RequestError> {
     let essence = block.media_type.essence();
     let data = block.data.data().unwrap();
+    let text = str::from_utf8(data).ok();
 
-    match () {
-        _ if essence.ty == TEXT && data.len() <= MAX_TEXT_LENGTH => {
-            bot.send_message(
-                msg.chat.id,
-                format!("<pre>{}</pre>", str::from_utf8(data).unwrap()),
-            )
-            .parse_mode(ParseMode::Html)
-            .send()
-            .await?;
+    match text {
+        Some(text) if text.len() <= MAX_TEXT_LENGTH => {
+            bot.send_message(msg.chat.id, format!("<pre>{}</pre>", text))
+                .parse_mode(ParseMode::Html)
+                .send()
+                .await?;
         }
         _ if essence.ty == IMAGE => {
             bot.send_photo(msg.chat.id, InputFile::memory(data.to_vec()))
