@@ -35,7 +35,7 @@ async fn render_block(bot: AutoSend<Bot>, msg: &Message, block: Block) -> Result
             bot.send_message(
                 msg.chat.id,
                 format!(
-                    "{}: <spoiler>{}</spoiler>",
+                    "{}: <tg-spoiler>{}</tg-spoiler>",
                     spiler.title,
                     spiler.data.unsecure()
                 ),
