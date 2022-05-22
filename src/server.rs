@@ -37,6 +37,7 @@ impl Server {
 
                 let zuk = yozuk.clone();
                 let logger = logger.clone();
+                let tokenizer = Tokenizer::new();
                 async move {
                     if let MessageKind::Common(common) = &msg.kind {
                         let mut streams = get_streams_from_message(&bot, &msg).await?;
@@ -51,32 +52,31 @@ impl Server {
                                         .append(&mut get_streams_from_message(&bot, reply).await?);
                                 }
                                 merged_streams.append(&mut streams);
-                                let tokens = Yozuk::parse_tokens(&text.text);
+                                let tokens = tokenizer.tokenize(&text.text);
                                 send_output(bot, msg, &zuk, tokens, merged_streams, logger.clone())
                                     .await?;
                             }
                             MediaKind::Photo(photo) => {
                                 let tokens =
-                                    Yozuk::parse_tokens(&photo.caption.clone().unwrap_or_default());
+                                    tokenizer.tokenize(&photo.caption.clone().unwrap_or_default());
                                 send_output(bot, msg, &zuk, tokens, streams, logger.clone())
                                     .await?;
                             }
                             MediaKind::Audio(audio) => {
                                 let tokens =
-                                    Yozuk::parse_tokens(&audio.caption.clone().unwrap_or_default());
+                                    tokenizer.tokenize(&audio.caption.clone().unwrap_or_default());
                                 send_output(bot, msg, &zuk, tokens, streams, logger.clone())
                                     .await?;
                             }
                             MediaKind::Video(video) => {
                                 let tokens =
-                                    Yozuk::parse_tokens(&video.caption.clone().unwrap_or_default());
+                                    tokenizer.tokenize(&video.caption.clone().unwrap_or_default());
                                 send_output(bot, msg, &zuk, tokens, streams, logger.clone())
                                     .await?;
                             }
                             MediaKind::Document(document) => {
-                                let tokens = Yozuk::parse_tokens(
-                                    &document.caption.clone().unwrap_or_default(),
-                                );
+                                let tokens = tokenizer
+                                    .tokenize(&document.caption.clone().unwrap_or_default());
                                 send_output(bot, msg, &zuk, tokens, streams, logger.clone())
                                     .await?;
                             }
@@ -171,12 +171,14 @@ async fn send_output(
     let result = zuk.run_commands(commands, &mut streams, None);
     debug!(logger, "result: {:?}", result);
 
-    let output = match result {
+    let outputs = match result {
         Ok(output) => output,
-        Err(mut errors) => errors.pop().unwrap(),
+        Err(errors) => errors,
     };
 
-    message::render_output(bot, &msg, output).await?;
+    for output in outputs {
+        message::render_output(bot.clone(), &msg, output).await?;
+    }
 
     Ok(())
 }

@@ -15,7 +15,6 @@ use std::io::Read;
 use std::path::PathBuf;
 use teloxide::prelude2::*;
 use yozuk::Yozuk;
-use yozuk_sdk::model::*;
 use yozuk_sdk::prelude::*;
 
 mod message;
@@ -71,11 +70,7 @@ async fn main() -> Result<()> {
             .expect("Cannot setup a webhook");
     }
 
-    let model = ModelSet::from_data(yozuk_bundle::MODEL_DATA).unwrap();
-    let yozuk = Yozuk::builder()
-        .set_logger(logger.clone())
-        .set_config(config)
-        .build(model);
+    let yozuk = Yozuk::builder().set_config(config).build();
 
     server::Server::start(yozuk, logger, bot).await;
     Ok(())

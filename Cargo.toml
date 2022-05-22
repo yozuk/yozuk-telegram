@@ -5,25 +5,24 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.57"
-clap = { version = "3.1.15", features = ["derive"] }
+clap = { version = "3.1.18", features = ["derive"] }
 futures = "0.3.21"
 image = "0.24.2"
 log = "0.4.17"
-mediatype = "0.19.2"
+mediatype = "0.19.3"
 new_mime_guess = "4.0.1"
 pretty_env_logger = "0.4.0"
 reqwest = "0.11.10"
-serde_json = "1.0.80"
-serde_yaml = "0.8.23"
+serde_json = "1.0.81"
+serde_yaml = "0.8.24"
 slog = "2.7.0"
 sloggers = "2.1.1"
 teloxide = "0.7.3"
 tempfile = "3.3.0"
-tokio = { version = "1.18.1", features = ["rt-multi-thread", "macros"] }
+tokio = { version = "1.18.2", features = ["rt-multi-thread", "macros"] }
 tokio-stream = "0.1.8"
 toml = "0.5.9"
 tree_magic = "0.2.3"
 warp = "0.3.2"
-yozuk = "0.12.0"
-yozuk-bundle = "0.12.0"
-yozuk-sdk = "0.12.0"
+yozuk = "=0.16.0"
+yozuk-sdk = "=0.16.0"
