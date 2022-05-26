@@ -127,9 +127,9 @@ checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
 
 [[package]]
 name = "bech32"
-version = "0.8.1"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf9ff0bbfd639f15c74af777d81383cf53efb7c93613f6cab67c6c11e05bbf8b"
+checksum = "c5738be7561b0eeb501ef1d5c5db3f24e01ceb55fededd9b00039aada34966ad"
 
 [[package]]
 name = "bigdecimal"
@@ -230,6 +230,12 @@ checksum = "fa79dedbb091f449f1f39e53edf88d5dbe95f895dae6135a8d7b881fb5af73f5"
 dependencies = [
  "byte-tools",
 ]
+
+[[package]]
+name = "blurhash"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8671e4c8bf59f8784aa27fe4c8e152f2a45dfeb91a52d114e5d104a451494bb4"
 
 [[package]]
 name = "bstr"
@@ -822,7 +828,7 @@ dependencies = [
  "cfg-if 1.0.0",
  "crc32fast",
  "libc",
- "miniz_oxide",
+ "miniz_oxide 0.5.1",
 ]
 
 [[package]]
@@ -1105,6 +1111,15 @@ name = "hex"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
+
+[[package]]
+name = "html-escape"
+version = "0.2.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b8e7479fa1ef38eb49fb6a42c426be515df2d063f06cb8efd3e50af073dbc26c"
+dependencies = [
+ "utf8-width",
+]
 
 [[package]]
 name = "http"
@@ -1507,6 +1522,16 @@ checksum = "4192263c238a5f0d0c6bfd21f336a313a4ce1c450542449ca191bb657b4642ef"
 dependencies = [
  "mime",
  "unicase",
+]
+
+[[package]]
+name = "miniz_oxide"
+version = "0.4.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a92518e98c078586bc6c934028adcca4c92a53d6a958196de835170a01d84e4b"
+dependencies = [
+ "adler",
+ "autocfg",
 ]
 
 [[package]]
@@ -1960,6 +1985,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 
 [[package]]
+name = "pix"
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bea9d5c668f13b4a1b97d848780e00cfabf76eb83538129c264c0c6d6a968047"
+
+[[package]]
 name = "pkg-config"
 version = "0.3.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1974,7 +2005,17 @@ dependencies = [
  "bitflags",
  "crc32fast",
  "deflate",
- "miniz_oxide",
+ "miniz_oxide 0.5.1",
+]
+
+[[package]]
+name = "png_pong"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "32b76c1da19406fed18e81972b9015a775447532647b04a8949135916d67778f"
+dependencies = [
+ "miniz_oxide 0.4.4",
+ "pix",
 ]
 
 [[package]]
@@ -2047,6 +2088,22 @@ name = "punycode"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e9e1dcb320d6839f6edb64f7a4a59d39b30480d4d1765b56873f7c858538a5fe"
+
+[[package]]
+name = "qrcode-generator"
+version = "4.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "501c33c9127afb867693646b38817bf63a9a756d4b66aefbc5c0d7e5e8c3125a"
+dependencies = [
+ "html-escape",
+ "qrcodegen",
+]
+
+[[package]]
+name = "qrcodegen"
+version = "1.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4339fc7a1021c9c1621d87f5e3505f2805c8c105420ba2f2a4df86814590c142"
 
 [[package]]
 name = "quick-error"
@@ -3190,6 +3247,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "09cc8ee72d2a9becf2f2febe0205bbed8fc6615b7cb429ad062dc7b7ddd036a9"
 
 [[package]]
+name = "utf8-width"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5190c9442dcdaf0ddd50f37420417d219ae5261bbf5db120d0f9bab996c9cba1"
+
+[[package]]
 name = "uuid"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3422,9 +3485,9 @@ dependencies = [
 
 [[package]]
 name = "yozuk"
-version = "0.16.0"
+version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "343b4a9a4c6a69c09213b094e492c2a438ddfcd5da77d1f79da8affbe0f02ed8"
+checksum = "2116441e55ee067e2fd0c6a87587c85c74acb175282cf897ea5ce34a3608113b"
 dependencies = [
  "anyhow",
  "bytes",
@@ -3440,9 +3503,9 @@ dependencies = [
 
 [[package]]
 name = "yozuk-core-skillset"
-version = "0.16.0"
+version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "982bd7ee8cda0a2fbaf1613c1c5c2cf03be911f59b31668d1a0eb995929f7ca4"
+checksum = "6d3e197736b4a1232a130ce4bff3a2f0c18679f6b349740f3c066f843c9a8cee"
 dependencies = [
  "anyhow",
  "base64",
@@ -3450,6 +3513,7 @@ dependencies = [
  "bigdecimal",
  "blake2",
  "blake3",
+ "blurhash",
  "chardetng",
  "clap",
  "const-sha1",
@@ -3462,6 +3526,7 @@ dependencies = [
  "itertools 0.10.3",
  "lazy_static",
  "lipsum",
+ "maplit",
  "md-5",
  "mediatype",
  "miller_rabin",
@@ -3471,8 +3536,11 @@ dependencies = [
  "palette",
  "pest",
  "pest_derive",
+ "pix",
+ "png_pong",
  "prime_tools",
  "punycode",
+ "qrcode-generator",
  "rand 0.8.5",
  "serde",
  "serde_derive",
@@ -3491,9 +3559,9 @@ dependencies = [
 
 [[package]]
 name = "yozuk-helper-english"
-version = "0.1.0"
+version = "0.16.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7324ad38d6ed2b5ca66b526e2dcb8a938fd43daaf226de9fb3698977deaa01e8"
+checksum = "b3b01c61e75cc871b6d750db70698ce6d7854f915f64a6b453c586ee3be0d8a7"
 dependencies = [
  "Inflector",
  "distance",
@@ -3502,21 +3570,24 @@ dependencies = [
 
 [[package]]
 name = "yozuk-helper-preprocessor"
-version = "0.16.0"
+version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7963c16013048e076d6e101d3240faaaa83fa6cdbf3f3e6b6994371f6331e52"
+checksum = "ec71e82e1b6963c91453cf70cd0559614285e83561c1c25eff56750e2f4f9da7"
 dependencies = [
  "yozuk-sdk",
 ]
 
 [[package]]
 name = "yozuk-model"
-version = "0.16.0"
+version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3ff7ed4e38419354c71b31e9e77809c43dfef0747d1f37b1c4df378bd3757b5d"
+checksum = "a33e04e8ff45f18f23c8571234dd3d7a23b45587b11b411f2c9a9a1d9701adbe"
 dependencies = [
  "anyhow",
+ "base64",
+ "blake2",
  "bytes",
+ "crfs",
  "crfsuite",
  "entropy",
  "itertools 0.10.3",
@@ -3529,9 +3600,9 @@ dependencies = [
 
 [[package]]
 name = "yozuk-sdk"
-version = "0.16.0"
+version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e0edaf8d92ec709e685c2f1d9c6a85d36304a127b61473c3cef611a2bfcedd9"
+checksum = "6a0d42cd0f33a091c8aefafd515a2364b23e6dea2ae063ca2e0d396f8a71ed5f"
 dependencies = [
  "anyhow",
  "base64",

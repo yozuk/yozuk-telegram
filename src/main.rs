@@ -10,12 +10,8 @@ use sloggers::{
     types::Severity,
     Build,
 };
-use std::fs::File;
-use std::io::Read;
-use std::path::PathBuf;
 use teloxide::prelude2::*;
 use yozuk::Yozuk;
-use yozuk_sdk::prelude::*;
 
 mod message;
 mod server;
@@ -33,25 +29,11 @@ pub struct Args {
     /// Increase the logging verbosity
     #[clap(short, long, parse(from_occurrences))]
     pub verbose: usize,
-
-    /// Load config from a TOML file
-    #[clap(short, long)]
-    pub config: Option<PathBuf>,
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = Args::parse();
-
-    let config: Config = if let Some(config) = &args.config {
-        let mut file = File::open(config)?;
-        let mut data = Vec::new();
-        file.read_to_end(&mut data)?;
-        toml::from_slice(&data)?
-    } else {
-        Default::default()
-    };
-
     let levels = [Severity::Info, Severity::Debug, Severity::Trace];
 
     let level = args.verbose.min(levels.len() - 1);
@@ -70,7 +52,7 @@ async fn main() -> Result<()> {
             .expect("Cannot setup a webhook");
     }
 
-    let yozuk = Yozuk::builder().set_config(config).build();
+    let yozuk = Yozuk::builder().build();
 
     server::Server::start(yozuk, logger, bot).await;
     Ok(())
