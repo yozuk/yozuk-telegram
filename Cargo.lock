@@ -598,6 +598,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b0dd6aab3061be00b739299a1d8b10da43848f0d857b30f30ab83226680cd06"
 
 [[package]]
+name = "cstr_core"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "644828c273c063ab0d39486ba42a5d1f3a499d35529c759e763a9c6cb8a0fb08"
+dependencies = [
+ "cty",
+ "memchr 2.4.1",
+]
+
+[[package]]
+name = "cty"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b365fabc795046672053e29c954733ec3b05e4be654ab130fe8f1f94d7051f35"
+
+[[package]]
 name = "darling"
 version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1799,9 +1815,9 @@ dependencies = [
 
 [[package]]
 name = "once_cell"
-version = "1.10.0"
+version = "1.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "87f3e037eac156d1775da914196f0f37741a274155e34a0b7e427c35d2a2ecb9"
+checksum = "7709cef83f0c1f58f666e746a08b21e0085f7440fa6a29cc194d68aac97a4225"
 
 [[package]]
 name = "opaque-debug"
@@ -1919,6 +1935,12 @@ checksum = "c705f256449c60da65e11ff6626e0c16a0a0b96aaa348de61376b249bc340f41"
 dependencies = [
  "regex",
 ]
+
+[[package]]
+name = "paste"
+version = "1.0.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c520e05135d6e763148b6426a837e239041653ba7becd2e538c076c738025fc"
 
 [[package]]
 name = "percent-encoding"
@@ -2442,6 +2464,40 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3582f63211428f83597b51b2ddb88e2a91a9d52d12831f9d08f5e624e8977422"
 
 [[package]]
+name = "rmp"
+version = "0.8.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "44519172358fd6d58656c86ab8e7fbc9e1490c3e8f14d35ed78ca0dd07403c9f"
+dependencies = [
+ "byteorder",
+ "num-traits 0.2.14",
+ "paste",
+]
+
+[[package]]
+name = "rmp-serde"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "25786b0d276110195fa3d6f3f31299900cf71dfbd6c28450f3f58a0e7f7a347e"
+dependencies = [
+ "byteorder",
+ "rmp",
+ "serde",
+]
+
+[[package]]
+name = "rmpv"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "de8813b3a2f95c5138fe5925bfb8784175d88d6bff059ba8ce090aa891319754"
+dependencies = [
+ "num-traits 0.2.14",
+ "rmp",
+ "serde",
+ "serde_bytes",
+]
+
+[[package]]
 name = "rustc_version"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2581,6 +2637,15 @@ dependencies = [
  "serde",
  "thiserror",
  "xml-rs",
+]
+
+[[package]]
+name = "serde_bytes"
+version = "0.11.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "212e73464ebcde48d723aa02eb270ba62eff38a9b732df31f33f1b4e145f3a54"
+dependencies = [
+ "serde",
 ]
 
 [[package]]
@@ -2893,6 +2958,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "sys-locale"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3913c5a3d30054d7f77cf07cdd800c8103ace15c6e44437c5db66a43dd3a92cf"
+dependencies = [
+ "cc",
+ "cstr_core",
+ "libc",
+ "web-sys",
+ "winapi",
+]
+
+[[package]]
 name = "take_mut"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3091,7 +3169,9 @@ dependencies = [
  "phf_codegen",
  "serde",
  "serde-xml-rs",
+ "thiserror",
  "time 0.3.9",
+ "windows-sys",
 ]
 
 [[package]]
@@ -3602,6 +3682,49 @@ dependencies = [
 ]
 
 [[package]]
+name = "windows-sys"
+version = "0.32.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3df6e476185f92a12c072be4a189a0210dcdcf512a1891d6dff9edb874deadc6"
+dependencies = [
+ "windows_aarch64_msvc",
+ "windows_i686_gnu",
+ "windows_i686_msvc",
+ "windows_x86_64_gnu",
+ "windows_x86_64_msvc",
+]
+
+[[package]]
+name = "windows_aarch64_msvc"
+version = "0.32.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d8e92753b1c443191654ec532f14c199742964a061be25d77d7a96f09db20bf5"
+
+[[package]]
+name = "windows_i686_gnu"
+version = "0.32.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6a711c68811799e017b6038e0922cb27a5e2f43a2ddb609fe0b6f3eeda9de615"
+
+[[package]]
+name = "windows_i686_msvc"
+version = "0.32.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "146c11bb1a02615db74680b32a68e2d61f553cc24c4eb5b4ca10311740e44172"
+
+[[package]]
+name = "windows_x86_64_gnu"
+version = "0.32.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c912b12f7454c6620635bbff3450962753834be2a594819bd5e945af18ec64bc"
+
+[[package]]
+name = "windows_x86_64_msvc"
+version = "0.32.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "504a2476202769977a040c6364301a3f65d0cc9e3fb08600b2bda150a0488316"
+
+[[package]]
 name = "winreg"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3627,9 +3750,9 @@ dependencies = [
 
 [[package]]
 name = "yozuk"
-version = "0.17.2"
+version = "0.18.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c5ef9db13be6d07eff93bd92379a9e25aab6d4179bd5e7f1aa899bfd2164e2b8"
+checksum = "12e23a71558381dfc89e0f0f8f3bedf23fb949fbc4b0579a4b83516be2b20bcb"
 dependencies = [
  "anyhow",
  "bytes",
@@ -3645,9 +3768,9 @@ dependencies = [
 
 [[package]]
 name = "yozuk-core-skillset"
-version = "0.17.2"
+version = "0.18.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da792aa798086ac326a27aba1da64bf4db3fc1bb409d89ea8dba931e35cb5bad"
+checksum = "4ec3f6cffa6a0f26f3ac715d91c50a9d4838b4bfa635a3262ca7aed5598c0851"
 dependencies = [
  "anyhow",
  "base64",
@@ -3667,7 +3790,6 @@ dependencies = [
  "getrandom",
  "hex",
  "itertools 0.10.3",
- "lazy_static",
  "lipsum",
  "maplit",
  "md-5",
@@ -3675,6 +3797,7 @@ dependencies = [
  "miller_rabin",
  "nanoid",
  "num-bigint 0.4.3",
+ "once_cell",
  "open-location-code",
  "palette",
  "pest",
@@ -3685,6 +3808,8 @@ dependencies = [
  "punycode",
  "qrcode-generator",
  "rand 0.8.5",
+ "rmp-serde",
+ "rmpv",
  "serde",
  "serde_derive",
  "serde_json",
@@ -3705,40 +3830,48 @@ dependencies = [
 
 [[package]]
 name = "yozuk-helper-english"
-version = "0.17.1"
+version = "0.18.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d865380d8a642c6256e7d94be80d1e3cdaf648fe5ba3797d6b1c345877fa6ca"
+checksum = "8fa8427e4ce0916d05c1004c7b51b89bd5f0ced2dfc8e5a22aa7b0a9f15c24f6"
 dependencies = [
  "Inflector",
  "deunicode",
  "distance",
+ "pest",
+ "pest_derive",
  "singularize",
+ "yozuk-helper-preprocessor",
+ "yozuk-sdk",
 ]
 
 [[package]]
 name = "yozuk-helper-platform"
-version = "0.17.2"
+version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9ddb8520ea4c33fb0f5b14151f7109e0e515b54b34bab77172cf7be4908a134a"
+checksum = "b98f99037e31a115c32985e1b88e5a88b76de7ab0ace3b153ce1bf8534a5231b"
 dependencies = [
+ "atty",
+ "sys-locale",
  "time 0.3.9",
+ "time-tz",
+ "wasi 0.11.0+wasi-snapshot-preview1",
  "wasm-bindgen",
 ]
 
 [[package]]
 name = "yozuk-helper-preprocessor"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7cd38592c588715a4057e36d844abb7edd80fcf4a7b0132f020a8ca4bf2df0d5"
+checksum = "9456c98d616958d99f34fa20c564e8535beb45949254930f887dcd85ae522fd8"
 dependencies = [
  "yozuk-sdk",
 ]
 
 [[package]]
 name = "yozuk-model"
-version = "0.17.1"
+version = "0.18.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dbbd163537685f563695b1180b0ec53d1f28cbe049aef5cc557fa3d040128c66"
+checksum = "2c847bf64fe244e5ef75cfc9a091f544c3f3f09963be98f25a61d6720279dcb7"
 dependencies = [
  "anyhow",
  "base64",
@@ -3757,16 +3890,15 @@ dependencies = [
 
 [[package]]
 name = "yozuk-sdk"
-version = "0.17.1"
+version = "0.18.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e4d00b6fb10e7e081a5e1ed753ac6258cfec609f7805a02b08b87b85ae7d3aa"
+checksum = "1078ba9df6cfed75ef88443405f91529cf382994776af39b81f792161ec16808"
 dependencies = [
  "anyhow",
  "base64",
  "bincode",
  "bytes",
  "mediatype",
- "nanoid",
  "pest",
  "pest_derive",
  "secstr",
@@ -3782,6 +3914,7 @@ version = "0.6.0"
 dependencies = [
  "anyhow",
  "clap",
+ "css-color",
  "futures",
  "image",
  "log",
