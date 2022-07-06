@@ -5,7 +5,7 @@ use std::str;
 use std::str::FromStr;
 use teloxide::RequestError;
 use teloxide::{
-    prelude2::*,
+    prelude::*,
     types::{InputFile, ParseMode},
 };
 use yozuk_sdk::prelude::*;

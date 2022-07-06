@@ -10,7 +10,8 @@ use sloggers::{
     types::Severity,
     Build,
 };
-use teloxide::prelude2::*;
+
+use teloxide::prelude::*;
 use yozuk::Yozuk;
 
 mod message;

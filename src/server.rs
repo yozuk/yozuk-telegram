@@ -14,7 +14,7 @@ use teloxide::{
         stop_token::AsyncStopToken,
         update_listeners::{self, StatefulListener},
     },
-    prelude2::*,
+    prelude::*,
     types::{MediaKind, MessageKind, ParseMode, Update},
 };
 use tempfile::NamedTempFile;
@@ -30,7 +30,7 @@ impl Server {
     pub async fn start(yozuk: Yozuk, logger: Logger, bot: AutoSend<Bot>) {
         let yozuk = Arc::new(yozuk);
 
-        teloxide::repls2::repl_with_listener(
+        teloxide::repl_with_listener(
             bot.clone(),
             move |msg: Message, bot: AutoSend<Bot>| {
                 debug!(logger, "recv: {:?}", msg);
